@@ -1,11 +1,9 @@
 package com.github.achatain.nopasswordauthentication.app;
 
-import com.github.achatain.nopasswordauthentication.utils.TokenUtils;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
-import org.apache.commons.codec.binary.Hex;
 
 @Cache
 @Entity
@@ -19,8 +17,8 @@ public class App {
 
     private String name;
 
-    @Index // FIXME blob can not be indexed... Consider storing as a hex String
-    private byte apiToken[];
+    @Index
+    private String apiToken;
 
     private String callbackUrl;
 
@@ -54,7 +52,7 @@ public class App {
         return name;
     }
 
-    public byte[] getApiToken() {
+    public String getApiToken() {
         return apiToken;
     }
 
@@ -72,7 +70,7 @@ public class App {
                 "id=" + id +
                 ", ownerEmail='" + ownerEmail + '\'' +
                 ", name='" + name + '\'' +
-                ", apiToken=" + Hex.encodeHexString(apiToken).substring(0, 4).concat("*****") +
+                ", apiToken=" + apiToken +
                 ", callbackUrl='" + callbackUrl + '\'' +
                 ", emailTemplate='" + emailTemplate + '\'' +
                 '}';
@@ -82,7 +80,7 @@ public class App {
 
         private String ownerEmail;
         private String name;
-        private byte apiToken[];
+        private String apiToken;
         private String callbackUrl;
         private String emailTemplate;
 
@@ -100,7 +98,7 @@ public class App {
         }
 
         Builder withApiToken(String apiToken) {
-            this.apiToken = TokenUtils.hash(apiToken);
+            this.apiToken = apiToken;
             return this;
         }
 
