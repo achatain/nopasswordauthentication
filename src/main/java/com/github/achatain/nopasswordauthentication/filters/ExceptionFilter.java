@@ -4,9 +4,13 @@ import javax.inject.Singleton;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Singleton
 public class ExceptionFilter implements Filter {
+
+    private static final Logger LOG = Logger.getLogger(ExceptionFilter.class.getName());
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -18,8 +22,9 @@ public class ExceptionFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Exception caught", e);
             ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write(e.getMessage());
+            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Unexpected error");
         }
     }
 

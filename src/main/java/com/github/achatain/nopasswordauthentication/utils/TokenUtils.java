@@ -7,10 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
-public class TokenUtils {
+public final class TokenUtils {
 
     private TokenUtils() {
-        // no-op
     }
 
     public static String generate() {

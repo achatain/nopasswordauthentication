@@ -17,15 +17,24 @@ class AppService {
         this.appRepository = appRepository;
     }
 
-    String create(String id, String owner, String name, String callbackUrl, String emailTemplate) {
-        Preconditions.checkArgument(isNotBlank(id));
-        Preconditions.checkArgument(isNotBlank(owner));
-        Preconditions.checkArgument(isNotBlank(name));
-        Preconditions.checkArgument(isNotBlank(callbackUrl));
+    String create(String ownerEmail, String name, String callbackUrl, String emailTemplate) {
+        Preconditions.checkArgument(isNotBlank(ownerEmail), "Parameter [ownerEmail] should not be blank");
+        Preconditions.checkArgument(isNotBlank(name), "Parameter [name] should not be blank");
+        Preconditions.checkArgument(isNotBlank(callbackUrl), "Parameter [callbackUrl] should not be blank");
+        Preconditions.checkArgument(EmailValidator.getInstance().isValid(ownerEmail), String.format("Email address [%s] is invalid", ownerEmail));
 
-        Preconditions.checkArgument(EmailValidator.getInstance().isValid(owner), String.format("Email address [%s] is invalid", owner));
-        Preconditions.checkArgument(appRepository.find(id) == null, String.format("id [%s] already exists", id));
+        String apiToken = TokenUtils.generate();
 
-        return appRepository.create(id, owner, name, TokenUtils.generate(), callbackUrl, emailTemplate);
+        App app = App.create()
+                .withOwnerEmail(ownerEmail)
+                .withName(name)
+                .withCallbackUrl(callbackUrl)
+                .withEmailTemplate(emailTemplate)
+                .withApiToken(apiToken)
+                .build();
+
+        appRepository.save(app);
+
+        return apiToken;
     }
 }
