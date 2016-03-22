@@ -30,7 +30,7 @@ class AppService {
                 .withName(name)
                 .withCallbackUrl(callbackUrl)
                 .withEmailTemplate(emailTemplate)
-                .withApiToken(apiToken)
+                .withApiToken(TokenUtils.hash(apiToken))
                 .build();
 
         appRepository.save(app);
