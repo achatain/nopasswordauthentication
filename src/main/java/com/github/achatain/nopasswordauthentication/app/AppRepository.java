@@ -1,18 +1,8 @@
 package com.github.achatain.nopasswordauthentication.app;
 
-import com.github.achatain.nopasswordauthentication.utils.TokenUtils;
+public interface AppRepository {
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
+    App find(Long id);
 
-class AppRepository {
-
-    App find(String id) {
-        return ofy().load().type(App.class).id(id).now();
-    }
-
-    String create(String id, String owner, String name, String apiToken, String callbackUrl, String emailTemplate) {
-        App app = new App(id, owner, name, TokenUtils.hash(apiToken), callbackUrl, emailTemplate);
-        ofy().save().entity(app).now();
-        return apiToken;
-    }
+    void save(App app);
 }
