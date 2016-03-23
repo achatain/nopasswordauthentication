@@ -23,9 +23,9 @@ public class AppServlet extends HttpServlet {
     private final transient Gson gson;
 
     @Inject
-    public AppServlet(AppService appService, Gson gson) {
-        this.appService = appService;
+    public AppServlet(Gson gson, AppService appService) {
         this.gson = gson;
+        this.appService = appService;
     }
 
     @Override

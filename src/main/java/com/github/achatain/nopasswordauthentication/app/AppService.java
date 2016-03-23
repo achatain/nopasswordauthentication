@@ -6,9 +6,11 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.inject.Inject;
 
+import static com.github.achatain.nopasswordauthentication.utils.Msg.invalidEmail;
+import static com.github.achatain.nopasswordauthentication.utils.Msg.paramShouldNotBeBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-class AppService {
+public class AppService {
 
     private AppRepository appRepository;
 
@@ -18,11 +20,12 @@ class AppService {
     }
 
     String create(String ownerEmail, String name, String callbackUrl, String emailTemplate) {
-        Preconditions.checkArgument(isNotBlank(ownerEmail), "Parameter [ownerEmail] should not be blank");
-        Preconditions.checkArgument(isNotBlank(name), "Parameter [name] should not be blank");
-        Preconditions.checkArgument(isNotBlank(callbackUrl), "Parameter [callbackUrl] should not be blank");
-        Preconditions.checkArgument(EmailValidator.getInstance().isValid(ownerEmail), String.format("Email address [%s] is invalid", ownerEmail));
+        Preconditions.checkArgument(isNotBlank(ownerEmail), paramShouldNotBeBlank("ownerEmail"));
+        Preconditions.checkArgument(isNotBlank(name), paramShouldNotBeBlank("name"));
+        Preconditions.checkArgument(isNotBlank(callbackUrl), paramShouldNotBeBlank("callbackUrl"));
+        Preconditions.checkArgument(EmailValidator.getInstance().isValid(ownerEmail), invalidEmail(ownerEmail));
 
+        // TODO check that this apiToken is not already present in the Datastore (don't forget to hash it before checking)
         String apiToken = TokenUtils.generate();
 
         App app = App.create()
@@ -36,5 +39,9 @@ class AppService {
         appRepository.save(app);
 
         return apiToken;
+    }
+
+    public App findByApiToken(String apiToken) {
+        return appRepository.findByApiToken(apiToken);
     }
 }
