@@ -2,6 +2,8 @@ package com.github.achatain.nopasswordauthentication.auth;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpHeaders;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,6 +19,8 @@ public class AuthServlet extends HttpServlet {
 
     private static final transient Logger LOG = Logger.getLogger(AuthServlet.class.getName());
 
+    static final String BEARER_PREFIX = "Bearer ";
+
     private final transient Gson gson;
     private final transient AuthService authService;
 
@@ -28,9 +32,16 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        AuthRequest authRequest = gson.fromJson(req.getReader(), AuthRequest.class);
+        String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
+        Preconditions.checkArgument(authorization != null, "Missing authorization header");
 
+        String apiToken = StringUtils.removeStartIgnoreCase(authorization, BEARER_PREFIX);
+        Preconditions.checkArgument(StringUtils.isNotBlank(apiToken), "Missing api token");
+
+        AuthRequest authRequest = gson.fromJson(req.getReader(), AuthRequest.class);
         Preconditions.checkArgument(authRequest != null, "Missing request body");
+
+        authRequest.setApiToken(StringUtils.trim(apiToken));
 
         LOG.info(String.format("Received an AuthServlet POST request with body [%s]", authRequest));
 
