@@ -24,7 +24,7 @@ public class ExceptionFilter implements Filter {
         } catch (InternalServerException e) {
             LOG.log(Level.SEVERE, "Internal server error", e);
             ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Unexpected error");
+            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Internal server error");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Exception caught", e);
             ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);

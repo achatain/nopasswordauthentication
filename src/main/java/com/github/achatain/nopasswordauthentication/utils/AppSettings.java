@@ -13,7 +13,10 @@ public final class AppSettings {
 
     private static final Logger LOG = Logger.getLogger(AppSettings.class.getName());
 
-    private static final Key KEY = KeyFactory.createKey("AppSettings", 1L);
+    static final String KIND = "AppSettings";
+    static final Long ID = 1L;
+
+    private static final Key KEY = KeyFactory.createKey(KIND, ID);
 
     // Settings keys
     private static final String SENDGRID_API_KEY = "sendGridApiKey";
@@ -42,7 +45,7 @@ public final class AppSettings {
         return getProperty(SENDGRID_API_KEY);
     }
 
-    public static void setSendgridApiKey(String value) {
+    static void setSendgridApiKey(String value) {
         setProperty(SENDGRID_API_KEY, value);
     }
 
@@ -58,7 +61,7 @@ public final class AppSettings {
         return getProperty(EMAIL_SENDER);
     }
 
-    public static void setEmailSender(String value) {
+    static void setEmailSender(String value) {
         setProperty(EMAIL_SENDER, value);
     }
 
