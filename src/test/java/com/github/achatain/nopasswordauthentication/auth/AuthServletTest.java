@@ -40,4 +40,28 @@ public class AuthServletTest {
         assertEquals("faketoken", captor.getValue().getApiToken());
         assertEquals("user@test.com", captor.getValue().getUserEmail());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotAuthWithoutAuthorizationHeader() throws Exception {
+        authServlet.doPost(req, resp);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotAuthWithEmptyAuthorizationHeader() throws Exception {
+        req.setHeader(HttpHeaders.AUTHORIZATION, "");
+        authServlet.doPost(req, resp);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotAuthWithoutAuthorizationToken() throws Exception {
+        req.setHeader(HttpHeaders.AUTHORIZATION, AuthServlet.BEARER_PREFIX);
+        authServlet.doPost(req, resp);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotAuthWithoutRequestBody() throws Exception {
+        req.setHeader(HttpHeaders.AUTHORIZATION, AuthServlet.BEARER_PREFIX + " faketoken ");
+        req.setBody("");
+        authServlet.doPost(req, resp);
+    }
 }
