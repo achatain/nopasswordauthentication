@@ -14,8 +14,8 @@ import java.io.IOException;
 @Singleton
 public class AdminServlet extends HttpServlet {
 
-    private static final String ACTION = "action";
-    private static final String ACTION_RESET = "reset";
+    static final String ACTION = "action";
+    static final String ACTION_RESET = "reset";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
