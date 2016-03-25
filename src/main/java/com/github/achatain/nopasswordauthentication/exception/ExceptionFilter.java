@@ -1,4 +1,4 @@
-package com.github.achatain.nopasswordauthentication.filters;
+package com.github.achatain.nopasswordauthentication.exception;
 
 import javax.inject.Singleton;
 import javax.servlet.*;
@@ -21,6 +21,10 @@ public class ExceptionFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
             chain.doFilter(request, response);
+        } catch (InternalServerException e) {
+            LOG.log(Level.SEVERE, "Internal server error", e);
+            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Unexpected error");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Exception caught", e);
             ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
