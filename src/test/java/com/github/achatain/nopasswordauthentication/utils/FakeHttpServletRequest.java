@@ -10,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -28,6 +29,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
     private String servletPath = "";
     private String pathInfo;
     private String method;
+    private String body;
     private static final Function<Collection<String>, String[]> STRING_COLLECTION_TO_ARRAY = new Function() {
         @Override
         public Object apply(Object o) {
@@ -104,7 +106,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
     }
 
     public BufferedReader getReader() {
-        throw new UnsupportedOperationException();
+        return new BufferedReader(new StringReader(body));
     }
 
     /**
@@ -343,6 +345,10 @@ public class FakeHttpServletRequest implements HttpServletRequest {
         this.method = name;
     }
 
+    public void setBody(String body) {
+        this.body = body;
+    }
+
     void setSerletPath(String servletPath) {
         this.servletPath = servletPath;
     }
@@ -357,6 +363,5 @@ public class FakeHttpServletRequest implements HttpServletRequest {
         } else {
             this.pathInfo = pathInfo;
         }
-
     }
 }
