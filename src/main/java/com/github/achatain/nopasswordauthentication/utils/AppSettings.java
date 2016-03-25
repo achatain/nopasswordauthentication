@@ -11,9 +11,8 @@ import java.util.logging.Logger;
 
 public final class AppSettings {
 
-    public static final String EMAIL_PROVIDER_APPENGINE = "appengine";
-    public static final String EMAIL_PROVIDER_SENDGRID = "sendgrid";
     private static final Logger LOG = Logger.getLogger(AppSettings.class.getName());
+
     private static final Key KEY = KeyFactory.createKey("AppSettings", 1L);
 
     // Settings keys
@@ -23,6 +22,8 @@ public final class AppSettings {
 
     // Properties constants
     private static final String CHANGE_ME = "change_me";
+    public static final String EMAIL_PROVIDER_APPENGINE = "appengine";
+    public static final String EMAIL_PROVIDER_SENDGRID = "sendgrid";
 
     private AppSettings() {
     }
