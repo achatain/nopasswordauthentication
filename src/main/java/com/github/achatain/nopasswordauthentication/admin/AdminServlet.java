@@ -1,10 +1,8 @@
 package com.github.achatain.nopasswordauthentication.admin;
 
+import com.github.achatain.nopasswordauthentication.utils.AppSettings;
 import com.github.achatain.nopasswordauthentication.utils.ServletResponseUtils;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
@@ -16,17 +14,21 @@ import java.io.IOException;
 @Singleton
 public class AdminServlet extends HttpServlet {
 
-    private static final Key SETTINGS_KEY = KeyFactory.createKey("AppSettings", 1L);
+    private static final String ACTION = "action";
+    private static final String ACTION_RESET = "reset";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Entity settings = new Entity(SETTINGS_KEY);
+        String action = StringUtils.defaultString(req.getParameter(ACTION));
 
-        settings.setUnindexedProperty("sendGridApiKey", "dummy");
-        settings.setUnindexedProperty("emailProvider", "appengine");
-
-        DatastoreServiceFactory.getDatastoreService().put(settings);
-
-        ServletResponseUtils.writeJsonResponse(resp, "status", "success");
+        switch (action) {
+            case ACTION_RESET:
+                AppSettings.reset();
+                ServletResponseUtils.writeJsonResponse(resp, "action", "reset");
+                break;
+            default:
+                ServletResponseUtils.writeJsonResponse(resp, "action", "unknown");
+                break;
+        }
     }
 }
