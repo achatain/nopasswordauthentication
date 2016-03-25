@@ -6,8 +6,8 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.inject.Inject;
 
-import static com.github.achatain.nopasswordauthentication.utils.Msg.invalidEmail;
-import static com.github.achatain.nopasswordauthentication.utils.Msg.paramShouldNotBeBlank;
+import static com.github.achatain.nopasswordauthentication.utils.MsgResources.invalidEmail;
+import static com.github.achatain.nopasswordauthentication.utils.MsgResources.paramShouldNotBeBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class AppService {
