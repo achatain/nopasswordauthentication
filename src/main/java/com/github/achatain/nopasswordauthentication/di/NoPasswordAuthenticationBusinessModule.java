@@ -2,10 +2,8 @@ package com.github.achatain.nopasswordauthentication.di;
 
 import com.github.achatain.nopasswordauthentication.app.AppRepository;
 import com.github.achatain.nopasswordauthentication.app.AppRepositoryImpl;
-import com.github.achatain.nopasswordauthentication.notification.email.AppEngineEmailServiceImpl;
 import com.github.achatain.nopasswordauthentication.notification.email.EmailService;
-import com.github.achatain.nopasswordauthentication.notification.email.SendGridEmailServiceImpl;
-import com.github.achatain.nopasswordauthentication.utils.AppSettings;
+import com.github.achatain.nopasswordauthentication.notification.email.EmailServiceFactory;
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -28,12 +26,6 @@ class NoPasswordAuthenticationBusinessModule extends AbstractModule {
 
     @Provides
     private EmailService provideEmailService() {
-        switch (AppSettings.getEmailProvider()) {
-            case "sendgrid":
-                return new SendGridEmailServiceImpl();
-            case "appengine":
-            default:
-                return new AppEngineEmailServiceImpl();
-        }
+        return EmailServiceFactory.getEmailService();
     }
 }
