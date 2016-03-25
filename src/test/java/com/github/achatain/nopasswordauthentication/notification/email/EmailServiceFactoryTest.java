@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class EmailServiceFactoryTest {
 
-    private LocalServiceTestHelper helper = new LocalServiceTestHelper(
+    private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
             new LocalDatastoreServiceTestConfig(),
             new LocalMemcacheServiceTestConfig());
 
