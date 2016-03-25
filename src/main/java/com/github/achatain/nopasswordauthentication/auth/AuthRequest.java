@@ -9,11 +9,15 @@ class AuthRequest {
     private AuthRequest() {
     }
 
-    public String getApiToken() {
+    void setApiToken(String apiToken) {
+        this.apiToken = apiToken;
+    }
+
+    String getApiToken() {
         return apiToken;
     }
 
-    public String getUserEmail() {
+    String getUserEmail() {
         return userEmail;
     }
 
