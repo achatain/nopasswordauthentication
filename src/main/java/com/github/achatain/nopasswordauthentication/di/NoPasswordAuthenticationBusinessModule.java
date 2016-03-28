@@ -21,10 +21,13 @@ package com.github.achatain.nopasswordauthentication.di;
 
 import com.github.achatain.nopasswordauthentication.app.AppRepository;
 import com.github.achatain.nopasswordauthentication.app.AppRepositoryImpl;
+import com.github.achatain.nopasswordauthentication.app.AppService;
 import com.github.achatain.nopasswordauthentication.auth.AuthRepository;
 import com.github.achatain.nopasswordauthentication.auth.AuthRepositoryImpl;
+import com.github.achatain.nopasswordauthentication.auth.AuthService;
 import com.github.achatain.nopasswordauthentication.email.EmailService;
 import com.github.achatain.nopasswordauthentication.email.EmailServiceFactory;
+import com.github.achatain.nopasswordauthentication.utils.TokenService;
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -36,9 +39,17 @@ class NoPasswordAuthenticationBusinessModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        // Objectify
         bind(ObjectifyFilter.class).in(Singleton.class);
+
+        // Repositories
         bind(AppRepository.class).to(AppRepositoryImpl.class).in(Singleton.class);
         bind(AuthRepository.class).to(AuthRepositoryImpl.class).in(Singleton.class);
+
+        // Services
+        bind(AppService.class).in(Singleton.class);
+        bind(AuthService.class).in(Singleton.class);
+        bind(TokenService.class).in(Singleton.class);
     }
 
     @Provides
