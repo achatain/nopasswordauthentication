@@ -28,6 +28,8 @@ import java.io.IOException;
 
 public class ServletResponseUtils {
 
+    private static final String JSON_TYPE = MediaType.JSON_UTF_8.toString();
+
     private ServletResponseUtils() {
     }
 
@@ -37,7 +39,7 @@ public class ServletResponseUtils {
 
     public static void writeJsonResponse(HttpServletResponse resp, JsonObject json) throws IOException {
         Preconditions.checkArgument(json != null, "Json argument should not be null");
-        resp.setContentType(MediaType.JSON_UTF_8.toString());
+        resp.setContentType(JSON_TYPE);
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(json.toString());
     }

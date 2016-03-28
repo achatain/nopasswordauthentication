@@ -17,19 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.nopasswordauthentication.exception;
+package com.github.achatain.nopasswordauthentication.di.filters;
+
+import com.github.achatain.nopasswordauthentication.exceptions.UnsupportedContentTypeException;
+import com.google.common.collect.Sets;
+import com.google.common.net.MediaType;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Singleton;
 import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Set;
 
 @Singleton
-public class ExceptionFilter implements Filter {
+public class JsonFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(ExceptionFilter.class.getName());
+    private static final Set<String> JSON_TYPES = Sets.newHashSet(
+            MediaType.JSON_UTF_8.withoutParameters().toString(),
+            MediaType.JSON_UTF_8.toString());
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -38,16 +43,12 @@ public class ExceptionFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        try {
+        String contentType = request.getContentType();
+
+        if (JSON_TYPES.contains(StringUtils.lowerCase(contentType))) {
             chain.doFilter(request, response);
-        } catch (InternalServerException e) {
-            LOG.log(Level.SEVERE, "Internal server error", e);
-            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Internal server error");
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Exception caught", e);
-            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Unexpected error");
+        } else {
+            throw new UnsupportedContentTypeException(String.format("Expected a JSON content type but got [%s]", contentType));
         }
     }
 

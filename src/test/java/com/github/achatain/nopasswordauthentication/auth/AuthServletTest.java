@@ -33,6 +33,7 @@ import static org.mockito.Mockito.verify;
 
 public class AuthServletTest {
 
+    private Gson gson = new Gson();
     private FakeHttpServletRequest req;
     private FakeHttpServletResponse resp;
     private AuthService authService;
@@ -43,7 +44,7 @@ public class AuthServletTest {
         req = new FakeHttpServletRequest();
         resp = new FakeHttpServletResponse();
         authService = mock(AuthService.class);
-        authServlet = new AuthServlet(new Gson(), authService);
+        authServlet = new AuthServlet(gson, authService);
     }
 
     @Test
