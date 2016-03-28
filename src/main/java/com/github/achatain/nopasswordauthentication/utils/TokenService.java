@@ -29,14 +29,11 @@ import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class TokenUtils {
+public class TokenService {
 
-    private static final Logger LOG = Logger.getLogger(TokenUtils.class.getName());
+    private static final Logger LOG = Logger.getLogger(TokenService.class.getName());
 
-    private TokenUtils() {
-    }
-
-    public static String generate() {
+    public String generate() {
         SecureRandom sr;
 
         try {
@@ -52,11 +49,11 @@ public final class TokenUtils {
         return RandomStringUtils.random(64, 0, 0, true, true, null, sr);
     }
 
-    public static String hash(String str) {
+    public String hash(String str) {
         return Hex.encodeHexString(hash(str.getBytes()));
     }
 
-    private static byte[] hash(byte bytes[]) {
+    private byte[] hash(byte bytes[]) {
         MessageDigest md;
 
         try {
