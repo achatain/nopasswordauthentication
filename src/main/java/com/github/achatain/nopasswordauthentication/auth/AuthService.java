@@ -42,11 +42,13 @@ class AuthService {
 
     private final AppService appService;
     private final EmailService emailService;
+    private final AuthRepository authRepository;
 
     @Inject
-    public AuthService(AppService appService, EmailService emailService) {
+    public AuthService(AppService appService, EmailService emailService, AuthRepository authRepository) {
         this.appService = appService;
         this.emailService = emailService;
+        this.authRepository = authRepository;
     }
 
     void auth(AuthRequest authRequest) {
@@ -66,7 +68,7 @@ class AuthService {
                 .withTimestamp(new Date().getTime())
                 .withToken(TokenUtils.hash(authToken))
                 .build();
-        // TODO persist the auth entity
+        authRepository.save(auth);
 
         // 3. Build the callbackUrl with query params
         String callbackUrl = String.format(CALLBACK_TEMPLATE, foundApp.getCallbackUrl(), auth.getUserId(), authToken);
