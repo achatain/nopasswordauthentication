@@ -22,6 +22,7 @@ package com.github.achatain.nopasswordauthentication.utils;
 import com.google.appengine.repackaged.com.google.common.base.Function;
 import com.google.appengine.repackaged.com.google.common.base.Splitter;
 import com.google.appengine.repackaged.com.google.common.collect.*;
+import org.apache.http.HttpHeaders;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
@@ -77,7 +78,14 @@ public class FakeHttpServletRequest implements HttpServletRequest {
     }
 
     public String getContentType() {
-        return null;
+        String value;
+        List<String> listContentType = headers.get(HttpHeaders.CONTENT_TYPE);
+        if (listContentType == null || listContentType.size() == 0) {
+            value = null;
+        } else {
+            value = listContentType.get(0);
+        }
+        return value;
     }
 
     public ServletInputStream getInputStream() {
