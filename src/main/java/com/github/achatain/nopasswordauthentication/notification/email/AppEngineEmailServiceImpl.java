@@ -30,7 +30,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
-public class AppEngineEmailServiceImpl implements EmailService {
+class AppEngineEmailServiceImpl implements EmailService {
 
     @Override
     public boolean sendEmail(Long appId, String from, String fromName, String to, String subject, String text) {

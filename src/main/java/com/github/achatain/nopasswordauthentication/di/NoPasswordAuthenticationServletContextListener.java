@@ -20,6 +20,7 @@
 package com.github.achatain.nopasswordauthentication.di;
 
 import com.github.achatain.nopasswordauthentication.app.App;
+import com.github.achatain.nopasswordauthentication.auth.Auth;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -29,6 +30,7 @@ public class NoPasswordAuthenticationServletContextListener extends GuiceServlet
 
     static {
         ObjectifyService.register(App.class);
+        ObjectifyService.register(Auth.class);
     }
 
     @Override
