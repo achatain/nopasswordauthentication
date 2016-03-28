@@ -21,7 +21,7 @@ package com.github.achatain.nopasswordauthentication.auth;
 
 import com.github.achatain.nopasswordauthentication.app.App;
 import com.github.achatain.nopasswordauthentication.app.AppService;
-import com.github.achatain.nopasswordauthentication.notification.email.EmailService;
+import com.github.achatain.nopasswordauthentication.email.EmailService;
 import com.github.achatain.nopasswordauthentication.utils.TokenUtils;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;

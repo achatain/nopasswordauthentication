@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.nopasswordauthentication.notification.email;
+package com.github.achatain.nopasswordauthentication.email;
 
 import com.github.achatain.nopasswordauthentication.utils.AppSettings;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
