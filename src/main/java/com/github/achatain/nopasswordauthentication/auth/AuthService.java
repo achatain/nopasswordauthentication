@@ -22,7 +22,7 @@ package com.github.achatain.nopasswordauthentication.auth;
 import com.github.achatain.nopasswordauthentication.app.App;
 import com.github.achatain.nopasswordauthentication.app.AppService;
 import com.github.achatain.nopasswordauthentication.email.EmailService;
-import com.github.achatain.nopasswordauthentication.utils.TokenUtils;
+import com.github.achatain.nopasswordauthentication.utils.TokenService;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 import static com.github.achatain.nopasswordauthentication.utils.MsgResources.invalidEmail;
 import static com.github.achatain.nopasswordauthentication.utils.MsgResources.paramShouldNotBeBlank;
 
-class AuthService {
+public class AuthService {
 
     private static final Logger LOG = Logger.getLogger(AuthService.class.getName());
 
@@ -43,12 +43,14 @@ class AuthService {
     private final AppService appService;
     private final EmailService emailService;
     private final AuthRepository authRepository;
+    private final TokenService tokenService;
 
     @Inject
-    public AuthService(AppService appService, EmailService emailService, AuthRepository authRepository) {
+    public AuthService(AppService appService, EmailService emailService, AuthRepository authRepository, TokenService tokenService) {
         this.appService = appService;
         this.emailService = emailService;
         this.authRepository = authRepository;
+        this.tokenService = tokenService;
     }
 
     void auth(AuthRequest authRequest) {
@@ -56,17 +58,17 @@ class AuthService {
         Preconditions.checkArgument(EmailValidator.getInstance().isValid(authRequest.getUserEmail()), invalidEmail(authRequest.getUserEmail()));
 
         // 1. Hash the received api token and find the matching app
-        App foundApp = appService.findByApiToken(TokenUtils.hash(authRequest.getApiToken()));
+        App foundApp = appService.findByApiToken(tokenService.hash(authRequest.getApiToken()));
         Preconditions.checkState(foundApp != null, "No application matching this api token was found");
 
         // 2. Create an Auth entity with userEmail | authToken | appId | timestamp
-        String authToken = TokenUtils.generate();
+        String authToken = tokenService.generate();
 
         Auth auth = Auth.create()
                 .withAppId(foundApp.getId())
                 .withUserId(authRequest.getUserEmail())
                 .withTimestamp(new Date().getTime())
-                .withToken(TokenUtils.hash(authToken))
+                .withToken(tokenService.hash(authToken))
                 .build();
         authRepository.save(auth);
 

@@ -19,7 +19,7 @@
 
 package com.github.achatain.nopasswordauthentication.app;
 
-import com.github.achatain.nopasswordauthentication.utils.TokenUtils;
+import com.github.achatain.nopasswordauthentication.utils.TokenService;
 import com.google.common.base.Preconditions;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -31,11 +31,13 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class AppService {
 
-    private AppRepository appRepository;
+    private final AppRepository appRepository;
+    private final TokenService tokenService;
 
     @Inject
-    public AppService(AppRepository appRepository) {
+    public AppService(AppRepository appRepository, TokenService tokenService) {
         this.appRepository = appRepository;
+        this.tokenService = tokenService;
     }
 
     String create(String ownerEmail, String name, String callbackUrl, String emailTemplate) {
@@ -45,14 +47,14 @@ public class AppService {
         Preconditions.checkArgument(EmailValidator.getInstance().isValid(ownerEmail), invalidEmail(ownerEmail));
 
         // TODO check that this apiToken is not already present in the Datastore (don't forget to hash it before checking)
-        String apiToken = TokenUtils.generate();
+        String apiToken = tokenService.generate();
 
         App app = App.create()
                 .withOwnerEmail(ownerEmail)
                 .withName(name)
                 .withCallbackUrl(callbackUrl)
                 .withEmailTemplate(emailTemplate)
-                .withApiToken(TokenUtils.hash(apiToken))
+                .withApiToken(tokenService.hash(apiToken))
                 .build();
 
         appRepository.save(app);

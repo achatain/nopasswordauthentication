@@ -24,15 +24,17 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class TokenUtilsTest {
+public class TokenServiceTest {
+
+    private TokenService tokenService = new TokenService();
 
     @Test
     public void shouldGenerate() throws Exception {
-        assertNotNull(TokenUtils.generate());
+        assertNotNull(tokenService.generate());
     }
 
     @Test
     public void shouldHash() throws Exception {
-        assertEquals("083de31ac1fa14f95671a6e39cc6c72d8fed1590b2a51759bc3f54a76b4169c4", TokenUtils.hash("Bonjour!"));
+        assertEquals("083de31ac1fa14f95671a6e39cc6c72d8fed1590b2a51759bc3f54a76b4169c4", tokenService.hash("Bonjour!"));
     }
 }
