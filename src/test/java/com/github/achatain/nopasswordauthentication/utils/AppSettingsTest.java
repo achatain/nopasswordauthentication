@@ -19,7 +19,7 @@
 
 package com.github.achatain.nopasswordauthentication.utils;
 
-import com.github.achatain.nopasswordauthentication.exception.InternalServerException;
+import com.github.achatain.nopasswordauthentication.exceptions.InternalServerException;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;

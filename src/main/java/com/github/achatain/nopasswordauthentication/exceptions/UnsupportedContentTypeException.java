@@ -17,19 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.nopasswordauthentication.notification.email;
+package com.github.achatain.nopasswordauthentication.exceptions;
 
-import com.github.achatain.nopasswordauthentication.utils.AppSettings;
-
-public final class EmailServiceFactory {
-
-    public static EmailService getEmailService() {
-        switch (AppSettings.getEmailProvider()) {
-            case AppSettings.EMAIL_PROVIDER_SENDGRID:
-                return new SendGridEmailServiceImpl();
-            case AppSettings.EMAIL_PROVIDER_APPENGINE:
-            default:
-                return new AppEngineEmailServiceImpl();
-        }
+public class UnsupportedContentTypeException extends RuntimeException {
+    public UnsupportedContentTypeException(String message) {
+        super(message);
     }
 }

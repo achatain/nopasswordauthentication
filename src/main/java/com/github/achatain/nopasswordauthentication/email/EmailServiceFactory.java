@@ -17,14 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.nopasswordauthentication.exception;
+package com.github.achatain.nopasswordauthentication.email;
 
-public class InternalServerException extends RuntimeException {
-    public InternalServerException(String message) {
-        super(message);
-    }
+import com.github.achatain.nopasswordauthentication.utils.AppSettings;
 
-    public InternalServerException(String message, Throwable cause) {
-        super(message, cause);
+public final class EmailServiceFactory {
+
+    public static EmailService getEmailService() {
+        switch (AppSettings.getEmailProvider()) {
+            case AppSettings.EMAIL_PROVIDER_SENDGRID:
+                return new SendGridEmailServiceImpl();
+            case AppSettings.EMAIL_PROVIDER_APPENGINE:
+            default:
+                return new AppEngineEmailServiceImpl();
+        }
     }
 }

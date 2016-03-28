@@ -22,7 +22,8 @@ package com.github.achatain.nopasswordauthentication.di;
 import com.github.achatain.nopasswordauthentication.admin.AdminServlet;
 import com.github.achatain.nopasswordauthentication.app.AppServlet;
 import com.github.achatain.nopasswordauthentication.auth.AuthServlet;
-import com.github.achatain.nopasswordauthentication.exception.ExceptionFilter;
+import com.github.achatain.nopasswordauthentication.di.filters.ExceptionFilter;
+import com.github.achatain.nopasswordauthentication.di.filters.JsonFilter;
 import com.google.inject.servlet.ServletModule;
 import com.googlecode.objectify.ObjectifyFilter;
 
@@ -32,6 +33,7 @@ class NoPasswordAuthenticationServletModule extends ServletModule {
     protected void configureServlets() {
         // Filters
         filter("/*").through(ObjectifyFilter.class);
+        filter("/*").through(JsonFilter.class);
         filter("/*").through(ExceptionFilter.class);
 
         // Servlets
