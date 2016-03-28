@@ -44,34 +44,38 @@ public class Auth {
         // required by Objectify
     }
 
-    public Auth(Builder builder) {
+    private Auth(Builder builder) {
         this.userId = builder.userId;
         this.appId = builder.appId;
         this.timestamp = builder.timestamp;
         this.token = builder.token;
     }
 
-    public static Builder create() {
+    static Builder create() {
         return new Builder();
     }
 
-    public String getId() {
+    String getId() {
         return id;
     }
 
-    public String getUserId() {
+    void setId(String id) {
+        this.id = id;
+    }
+
+    String getUserId() {
         return userId;
     }
 
-    public Long getAppId() {
+    Long getAppId() {
         return appId;
     }
 
-    public Long getTimestamp() {
+    Long getTimestamp() {
         return timestamp;
     }
 
-    public String getToken() {
+    String getToken() {
         return token;
     }
 
