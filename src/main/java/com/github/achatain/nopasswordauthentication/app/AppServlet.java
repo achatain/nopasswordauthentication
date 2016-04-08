@@ -49,13 +49,13 @@ public class AppServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        App app = gson.fromJson(req.getReader(), App.class);
+        AppDto appDto = gson.fromJson(req.getReader(), AppDto.class);
 
-        Preconditions.checkArgument(app != null, "Missing request body");
+        Preconditions.checkArgument(appDto != null, "Missing request body");
 
-        LOG.info(String.format("Received an AppServlet POST request with body [%s]", app));
+        LOG.info(String.format("Received an AppServlet POST request with body [%s]", appDto));
 
-        String apiToken = appService.create(app.getOwnerEmail(), app.getName(), app.getCallbackUrl(), app.getEmailTemplate());
+        String apiToken = appService.create(appDto);
 
         writeJsonResponse(resp, AppProperties.API_TOKEN, apiToken);
     }

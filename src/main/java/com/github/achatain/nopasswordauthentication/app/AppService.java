@@ -40,20 +40,20 @@ public class AppService {
         this.tokenService = tokenService;
     }
 
-    String create(String ownerEmail, String name, String callbackUrl, String emailTemplate) {
-        Preconditions.checkArgument(isNotBlank(ownerEmail), paramShouldNotBeBlank("ownerEmail"));
-        Preconditions.checkArgument(isNotBlank(name), paramShouldNotBeBlank("name"));
-        Preconditions.checkArgument(isNotBlank(callbackUrl), paramShouldNotBeBlank("callbackUrl"));
-        Preconditions.checkArgument(EmailValidator.getInstance().isValid(ownerEmail), invalidEmail(ownerEmail));
+    String create(AppDto appDto) {
+        Preconditions.checkArgument(isNotBlank(appDto.getOwnerEmail()), paramShouldNotBeBlank("ownerEmail"));
+        Preconditions.checkArgument(isNotBlank(appDto.getName()), paramShouldNotBeBlank("name"));
+        Preconditions.checkArgument(isNotBlank(appDto.getCallbackUrl()), paramShouldNotBeBlank("callbackUrl"));
+        Preconditions.checkArgument(EmailValidator.getInstance().isValid(appDto.getOwnerEmail()), invalidEmail(appDto.getOwnerEmail()));
 
         // TODO check that this apiToken is not already present in the Datastore (don't forget to hash it before checking)
         String apiToken = tokenService.generate();
 
         App app = App.create()
-                .withOwnerEmail(ownerEmail)
-                .withName(name)
-                .withCallbackUrl(callbackUrl)
-                .withEmailTemplate(emailTemplate)
+                .withOwnerEmail(appDto.getOwnerEmail())
+                .withName(appDto.getName())
+                .withCallbackUrl(appDto.getCallbackUrl())
+                .withEmailTemplate(appDto.getEmailTemplate())
                 .withApiToken(tokenService.hash(apiToken))
                 .build();
 
