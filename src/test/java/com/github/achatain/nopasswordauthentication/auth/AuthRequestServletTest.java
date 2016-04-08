@@ -31,31 +31,31 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class AuthServletTest {
+public class AuthRequestServletTest {
 
     private Gson gson = new Gson();
     private FakeHttpServletRequest req;
     private FakeHttpServletResponse resp;
     private AuthService authService;
-    private AuthServlet authServlet;
+    private AuthRequestServlet authRequestServlet;
 
     @Before
     public void setUp() throws Exception {
         req = new FakeHttpServletRequest();
         resp = new FakeHttpServletResponse();
         authService = mock(AuthService.class);
-        authServlet = new AuthServlet(gson, authService);
+        authRequestServlet = new AuthRequestServlet(gson, authService);
     }
 
     @Test
     public void shouldAuthThroughAuthService() throws Exception {
-        req.setHeader(HttpHeaders.AUTHORIZATION, AuthServlet.BEARER_PREFIX + " faketoken ");
+        req.setHeader(HttpHeaders.AUTHORIZATION, AuthRequestServlet.BEARER_PREFIX + " faketoken ");
         req.setBody("{\"userId\":\"user@test.com\"}");
 
-        authServlet.doPost(req, resp);
+        authRequestServlet.doPost(req, resp);
 
         ArgumentCaptor<AuthRequest> captor = ArgumentCaptor.forClass(AuthRequest.class);
-        verify(authService).auth(captor.capture());
+        verify(authService).request(captor.capture());
 
         assertEquals("faketoken", captor.getValue().getApiToken());
         assertEquals("user@test.com", captor.getValue().getUserId());
@@ -63,25 +63,25 @@ public class AuthServletTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotAuthWithoutAuthorizationHeader() throws Exception {
-        authServlet.doPost(req, resp);
+        authRequestServlet.doPost(req, resp);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotAuthWithEmptyAuthorizationHeader() throws Exception {
         req.setHeader(HttpHeaders.AUTHORIZATION, "");
-        authServlet.doPost(req, resp);
+        authRequestServlet.doPost(req, resp);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotAuthWithoutAuthorizationToken() throws Exception {
-        req.setHeader(HttpHeaders.AUTHORIZATION, AuthServlet.BEARER_PREFIX);
-        authServlet.doPost(req, resp);
+        req.setHeader(HttpHeaders.AUTHORIZATION, AuthRequestServlet.BEARER_PREFIX);
+        authRequestServlet.doPost(req, resp);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotAuthWithoutRequestBody() throws Exception {
-        req.setHeader(HttpHeaders.AUTHORIZATION, AuthServlet.BEARER_PREFIX + " faketoken ");
+        req.setHeader(HttpHeaders.AUTHORIZATION, AuthRequestServlet.BEARER_PREFIX + " faketoken ");
         req.setBody("");
-        authServlet.doPost(req, resp);
+        authRequestServlet.doPost(req, resp);
     }
 }

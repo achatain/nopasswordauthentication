@@ -34,9 +34,9 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 @Singleton
-public class AuthServlet extends HttpServlet {
+public class AuthRequestServlet extends HttpServlet {
 
-    private static final transient Logger LOG = Logger.getLogger(AuthServlet.class.getName());
+    private static final transient Logger LOG = Logger.getLogger(AuthRequestServlet.class.getName());
 
     static final String BEARER_PREFIX = "Bearer ";
 
@@ -44,7 +44,7 @@ public class AuthServlet extends HttpServlet {
     private final transient AuthService authService;
 
     @Inject
-    public AuthServlet(Gson gson, AuthService authService) {
+    public AuthRequestServlet(Gson gson, AuthService authService) {
         this.gson = gson;
         this.authService = authService;
     }
@@ -62,8 +62,8 @@ public class AuthServlet extends HttpServlet {
 
         authRequest.setApiToken(StringUtils.trim(apiToken));
 
-        LOG.info(String.format("Received an AuthServlet POST request with body [%s]", authRequest));
+        LOG.info(String.format("Received an AuthRequestServlet POST request with body [%s]", authRequest));
 
-        authService.auth(authRequest);
+        authService.request(authRequest);
     }
 }
