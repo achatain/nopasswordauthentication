@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 
 class AuthRequest {
     private String apiToken;
-    private String userEmail;
+    private String userId;
 
     private AuthRequest() {
     }
@@ -36,15 +36,15 @@ class AuthRequest {
         return apiToken;
     }
 
-    String getUserEmail() {
-        return userEmail;
+    String getUserId() {
+        return userId;
     }
 
     @Override
     public String toString() {
         return "AuthRequest{" +
                 "apiToken='" + StringUtils.leftPad(StringUtils.right(apiToken, 4), 10, '*') + '\'' +
-                ", userEmail='" + userEmail + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

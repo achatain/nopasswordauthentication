@@ -26,10 +26,6 @@ public class AppDto {
     private String callbackUrl;
     private String emailTemplate;
 
-    public AppDto() {
-        // Needed by Objectify
-    }
-
     public AppDto(Builder builder) {
         this.ownerEmail = builder.ownerEmail;
         this.name = builder.name;
@@ -70,7 +66,7 @@ public class AppDto {
                 '}';
     }
 
-    public Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
