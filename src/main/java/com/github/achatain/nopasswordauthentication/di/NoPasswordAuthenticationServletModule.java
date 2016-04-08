@@ -32,13 +32,13 @@ class NoPasswordAuthenticationServletModule extends ServletModule {
     @Override
     protected void configureServlets() {
         // Filters
-        filter("/*").through(ObjectifyFilter.class);
-        filter("/*").through(JsonFilter.class);
-        filter("/*").through(ExceptionFilter.class);
+        filter("/api/*").through(ObjectifyFilter.class);
+        filter("/api/*").through(JsonFilter.class);
+        filter("/api/*").through(ExceptionFilter.class);
 
         // Servlets
-        serve("/app").with(AppServlet.class);
-        serve("/auth").with(AuthServlet.class);
-        serve("/admin").with(AdminServlet.class);
+        serve("/api/app").with(AppServlet.class);
+        serve("/api/auth").with(AuthServlet.class);
+        serve("/api/admin").with(AdminServlet.class);
     }
 }

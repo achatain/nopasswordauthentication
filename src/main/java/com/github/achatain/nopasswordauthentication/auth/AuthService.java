@@ -55,18 +55,18 @@ public class AuthService {
 
     void auth(AuthRequest authRequest) {
         Preconditions.checkArgument(StringUtils.isNotBlank(authRequest.getApiToken()), paramShouldNotBeBlank("apiToken"));
-        Preconditions.checkArgument(EmailValidator.getInstance().isValid(authRequest.getUserEmail()), invalidEmail(authRequest.getUserEmail()));
+        Preconditions.checkArgument(EmailValidator.getInstance().isValid(authRequest.getUserId()), invalidEmail(authRequest.getUserId()));
 
         // 1. Hash the received api token and find the matching app
         App foundApp = appService.findByApiToken(tokenService.hash(authRequest.getApiToken()));
-        Preconditions.checkState(foundApp != null, "No application matching this api token was found");
+        Preconditions.checkState(foundApp != null, "Unrecognized client application");
 
         // 2. Create an Auth entity with userEmail | authToken | appId | timestamp
         String authToken = tokenService.generate();
 
         Auth auth = Auth.create()
                 .withAppId(foundApp.getId())
-                .withUserId(authRequest.getUserEmail())
+                .withUserId(authRequest.getUserId())
                 .withTimestamp(new Date().getTime())
                 .withToken(tokenService.hash(authToken))
                 .build();
@@ -80,7 +80,7 @@ public class AuthService {
                 foundApp.getId(),
                 foundApp.getOwnerEmail(),
                 foundApp.getName(),
-                authRequest.getUserEmail(),
+                authRequest.getUserId(),
                 "No password authentication",
                 callbackUrl);
     }
