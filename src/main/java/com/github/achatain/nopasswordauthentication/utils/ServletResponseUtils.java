@@ -37,6 +37,10 @@ public class ServletResponseUtils {
         writeJsonResponse(resp, createSinglePropertyJson(property, value));
     }
 
+    public static void writeJsonResponse(HttpServletResponse resp, String property, Boolean value) throws IOException {
+        writeJsonResponse(resp, createSinglePropertyJson(property, value));
+    }
+
     public static void writeJsonResponse(HttpServletResponse resp, JsonObject json) throws IOException {
         Preconditions.checkArgument(json != null, "Json argument should not be null");
         resp.setContentType(JSON_TYPE);
@@ -44,7 +48,17 @@ public class ServletResponseUtils {
         resp.getWriter().write(json.toString());
     }
 
+    public static void writeForbiddenResponse(HttpServletResponse resp) throws IOException {
+        resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+    }
+
     private static JsonObject createSinglePropertyJson(String property, String value) {
+        JsonObject json = new JsonObject();
+        json.addProperty(property, value);
+        return json;
+    }
+
+    private static JsonObject createSinglePropertyJson(String property, Boolean value) {
         JsonObject json = new JsonObject();
         json.addProperty(property, value);
         return json;

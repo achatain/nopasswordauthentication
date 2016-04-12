@@ -19,6 +19,7 @@
 
 package com.github.achatain.nopasswordauthentication.auth;
 
+import com.github.achatain.nopasswordauthentication.utils.ServletResponseUtils;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
@@ -60,8 +61,14 @@ public class AuthVerifyServlet extends HttpServlet {
         AuthVerify authVerify = gson.fromJson(req.getReader(), AuthVerify.class);
         Preconditions.checkArgument(authVerify != null, "Missing request body");
 
+        authVerify.setApiToken(StringUtils.trim(apiToken));
+
         boolean authOk = authService.verify(authVerify);
 
-        // Write response with appropriate HTTP CODE
+        if (authOk) {
+            ServletResponseUtils.writeJsonResponse(resp, "authorized", true);
+        } else {
+            ServletResponseUtils.writeForbiddenResponse(resp);
+        }
     }
 }
