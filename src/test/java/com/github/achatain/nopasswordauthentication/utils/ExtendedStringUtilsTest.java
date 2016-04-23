@@ -17,40 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.nopasswordauthentication.auth;
+package com.github.achatain.nopasswordauthentication.utils;
 
-import static com.github.achatain.nopasswordauthentication.utils.ExtendedStringUtils.obfuscate;
+import org.junit.Test;
 
-class AuthVerify {
-    private String apiToken;
-    private String userId;
-    private String token;
+import static org.junit.Assert.assertEquals;
 
-    private AuthVerify() {
+public class ExtendedStringUtilsTest {
+
+    @Test
+    public void shouldObfuscate() throws Exception {
+        assertEquals("****6789", ExtendedStringUtils.obfuscate("123456789"));
     }
 
-    void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
+    @Test
+    public void shouldObfuscateShortString() throws Exception {
+        assertEquals("****", ExtendedStringUtils.obfuscate("1234"));
     }
 
-    public String getApiToken() {
-        return apiToken;
+    @Test
+    public void shouldObfuscateEmptyString() throws Exception {
+        assertEquals("****", ExtendedStringUtils.obfuscate(""));
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    @Override
-    public String toString() {
-        return "AuthVerify{" +
-                "apiToken='" + obfuscate(apiToken) + '\'' +
-                ", userId='" + userId + '\'' +
-                ", token='" + obfuscate(token) + '\'' +
-                '}';
+    @Test
+    public void shouldObfuscateNullString() throws Exception {
+        assertEquals("****", ExtendedStringUtils.obfuscate(null));
     }
 }
