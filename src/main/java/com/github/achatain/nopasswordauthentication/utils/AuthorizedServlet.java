@@ -17,34 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.nopasswordauthentication.auth;
+package com.github.achatain.nopasswordauthentication.utils;
 
-import static com.github.achatain.nopasswordauthentication.utils.ExtendedStringUtils.obfuscate;
+import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpHeaders;
 
-class AuthRequest {
-    private String apiToken;
-    private String userId;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
-    private AuthRequest() {
-    }
+public class AuthorizedServlet extends HttpServlet {
 
-    void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
+    public static final String BEARER_PREFIX = "Bearer ";
 
-    String getApiToken() {
+    protected String verifyApiToken(HttpServletRequest req) {
+        String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
+        Preconditions.checkArgument(authorization != null, "Missing authorization header");
+
+        String apiToken = StringUtils.removeStartIgnoreCase(authorization, BEARER_PREFIX);
+        Preconditions.checkArgument(StringUtils.isNotBlank(apiToken), "Missing api token");
+
         return apiToken;
-    }
-
-    String getUserId() {
-        return userId;
-    }
-
-    @Override
-    public String toString() {
-        return "AuthRequest{" +
-                "apiToken='" + obfuscate(apiToken) + '\'' +
-                ", userId='" + userId + '\'' +
-                '}';
     }
 }
