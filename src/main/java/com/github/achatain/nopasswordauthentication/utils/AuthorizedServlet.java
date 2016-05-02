@@ -30,13 +30,13 @@ public class AuthorizedServlet extends HttpServlet {
 
     public static final String BEARER_PREFIX = "Bearer ";
 
-    protected String verifyApiToken(HttpServletRequest req) {
+    protected String extractApiToken(HttpServletRequest req) {
         String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
         Preconditions.checkArgument(authorization != null, "Missing authorization header");
 
         String apiToken = StringUtils.removeStartIgnoreCase(authorization, BEARER_PREFIX);
         Preconditions.checkArgument(StringUtils.isNotBlank(apiToken), "Missing api token");
 
-        return apiToken;
+        return StringUtils.trim(apiToken);
     }
 }
