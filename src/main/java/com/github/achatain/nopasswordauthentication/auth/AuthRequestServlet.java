@@ -22,7 +22,6 @@ package com.github.achatain.nopasswordauthentication.auth;
 import com.github.achatain.nopasswordauthentication.utils.AuthorizedServlet;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,12 +47,12 @@ public class AuthRequestServlet extends AuthorizedServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String apiToken = verifyApiToken(req);
+        String apiToken = extractApiToken(req);
 
         AuthRequest authRequest = gson.fromJson(req.getReader(), AuthRequest.class);
         Preconditions.checkArgument(authRequest != null, "Missing request body");
 
-        authRequest.setApiToken(StringUtils.trim(apiToken));
+        authRequest.setApiToken(apiToken);
 
         LOG.info(String.format("Received an AuthRequestServlet POST request with body [%s]", authRequest));
 

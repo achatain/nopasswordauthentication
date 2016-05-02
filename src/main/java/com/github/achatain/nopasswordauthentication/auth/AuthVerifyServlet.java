@@ -23,7 +23,6 @@ import com.github.achatain.nopasswordauthentication.utils.AuthorizedServlet;
 import com.github.achatain.nopasswordauthentication.utils.ServletResponseUtils;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,18 +48,20 @@ public class AuthVerifyServlet extends AuthorizedServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String apiToken = verifyApiToken(req);
+        String apiToken = extractApiToken(req);
 
         AuthVerify authVerify = gson.fromJson(req.getReader(), AuthVerify.class);
         Preconditions.checkArgument(authVerify != null, "Missing request body");
 
-        authVerify.setApiToken(StringUtils.trim(apiToken));
+        authVerify.setApiToken(apiToken);
 
         boolean authOk = authService.verify(authVerify);
 
         if (authOk) {
+            LOG.info(String.format("Successful authentication for user [%s]", authVerify.getUserId()));
             ServletResponseUtils.writeJsonResponse(resp, "authorized", true);
         } else {
+            LOG.info(String.format("Failed authentication for user [%s]", authVerify.getUserId()));
             ServletResponseUtils.writeForbiddenResponse(resp);
         }
     }
