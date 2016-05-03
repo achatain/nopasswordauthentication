@@ -55,7 +55,7 @@ public class AppSettingsTest {
 
     @Test(expected = InternalServerException.class)
     public void shouldNotFindProperty() throws Exception {
-        AppSettings.getEmailProvider();
+        AppSettings.getSendGridApiKey();
     }
 
     @Test
