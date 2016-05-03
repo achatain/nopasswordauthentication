@@ -1,0 +1,6 @@
+{
+  "ownerEmail": "achatain@github.com",
+  "name": "My Test App",
+  "callbackUrl": "https://testapp.github.com/",
+  "emailTemplate": "<html><p>My email template</p></html>"
+}

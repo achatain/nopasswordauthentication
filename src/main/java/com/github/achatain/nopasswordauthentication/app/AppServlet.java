@@ -36,6 +36,8 @@ import static com.github.achatain.nopasswordauthentication.utils.ServletResponse
 @Singleton
 public class AppServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 7139089887361872290L;
+
     private static final transient Logger LOG = Logger.getLogger(AppServlet.class.getName());
 
     private final transient AppService appService;
