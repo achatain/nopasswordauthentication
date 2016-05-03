@@ -21,30 +21,36 @@ package com.github.achatain.nopasswordauthentication.auth;
 
 import static com.github.achatain.nopasswordauthentication.utils.ExtendedStringUtils.obfuscate;
 
-class AuthRequest {
+class AuthVerify {
     private String apiToken;
     private String userId;
+    private String token;
 
-    private AuthRequest() {
+    private AuthVerify() {
     }
 
     void setApiToken(String apiToken) {
         this.apiToken = apiToken;
     }
 
-    String getApiToken() {
+    public String getApiToken() {
         return apiToken;
     }
 
-    String getUserId() {
+    public String getToken() {
+        return token;
+    }
+
+    public String getUserId() {
         return userId;
     }
 
     @Override
     public String toString() {
-        return "AuthRequest{" +
+        return "AuthVerify{" +
                 "apiToken='" + obfuscate(apiToken) + '\'' +
                 ", userId='" + userId + '\'' +
+                ", token='" + obfuscate(token) + '\'' +
                 '}';
     }
 }
