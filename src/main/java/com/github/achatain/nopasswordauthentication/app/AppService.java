@@ -49,7 +49,7 @@ public class AppService {
         // TODO check that this apiToken is not already present in the Datastore (don't forget to hash it before checking)
         String apiToken = tokenService.generate();
 
-        App app = App.create()
+        App app = App.builder()
                 .withOwnerEmail(appDto.getOwnerEmail())
                 .withName(appDto.getName())
                 .withCallbackUrl(appDto.getCallbackUrl())

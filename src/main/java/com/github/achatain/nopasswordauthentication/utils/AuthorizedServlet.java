@@ -28,6 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class AuthorizedServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 2766672305919080755L;
+
     public static final String BEARER_PREFIX = "Bearer ";
 
     protected String extractApiToken(HttpServletRequest req) {
