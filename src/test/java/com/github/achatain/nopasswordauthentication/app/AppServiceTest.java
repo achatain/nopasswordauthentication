@@ -91,7 +91,7 @@ public class AppServiceTest {
                 .withCallbackUrl("https://callback.com/")
                 .withEmailTemplate("<html><p>Email Template</p></html>")
                 .withName("")
-                .withOwnerEmail("")
+                .withOwnerEmail("owner@testapp.com")
                 .build();
 
         appService.create(appDto);
@@ -103,7 +103,7 @@ public class AppServiceTest {
                 .withCallbackUrl("")
                 .withEmailTemplate("<html><p>Email Template</p></html>")
                 .withName("Test App")
-                .withOwnerEmail("")
+                .withOwnerEmail("owner@testapp.com")
                 .build();
 
         appService.create(appDto);
