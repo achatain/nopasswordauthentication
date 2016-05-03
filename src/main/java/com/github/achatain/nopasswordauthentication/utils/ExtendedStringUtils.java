@@ -17,34 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.nopasswordauthentication.auth;
+package com.github.achatain.nopasswordauthentication.utils;
 
-import static com.github.achatain.nopasswordauthentication.utils.ExtendedStringUtils.obfuscate;
+import org.apache.commons.lang3.StringUtils;
 
-class AuthRequest {
-    private String apiToken;
-    private String userId;
+public class ExtendedStringUtils {
 
-    private AuthRequest() {
+    private static final String STARS = "****";
+
+    private ExtendedStringUtils() {
     }
 
-    void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
+    public static String obfuscate(String str) {
+        return obfuscate(str, 4);
     }
 
-    String getApiToken() {
-        return apiToken;
-    }
-
-    String getUserId() {
-        return userId;
-    }
-
-    @Override
-    public String toString() {
-        return "AuthRequest{" +
-                "apiToken='" + obfuscate(apiToken) + '\'' +
-                ", userId='" + userId + '\'' +
-                '}';
+    public static String obfuscate(String str, int visible) {
+        String defaultStr = StringUtils.defaultString(str);
+        if (defaultStr.length() > visible)
+            return StringUtils.overlay(defaultStr, STARS, 0, defaultStr.length() - visible);
+        return STARS;
     }
 }

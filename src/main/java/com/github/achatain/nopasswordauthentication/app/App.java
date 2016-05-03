@@ -24,6 +24,8 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
+import static com.github.achatain.nopasswordauthentication.utils.ExtendedStringUtils.obfuscate;
+
 @Cache
 @Entity
 public class App {
@@ -55,7 +57,7 @@ public class App {
         this.emailTemplate = builder.emailTemplate;
     }
 
-    public static Builder create() {
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -86,10 +88,10 @@ public class App {
     @Override
     public String toString() {
         return "App{" +
-                "id=" + id +
+                "apiToken='" + obfuscate(apiToken) + '\'' +
+                ", id=" + id +
                 ", ownerEmail='" + ownerEmail + '\'' +
                 ", name='" + name + '\'' +
-                ", apiToken=" + apiToken +
                 ", callbackUrl='" + callbackUrl + '\'' +
                 ", emailTemplate='" + emailTemplate + '\'' +
                 '}';

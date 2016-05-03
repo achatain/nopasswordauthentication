@@ -53,7 +53,7 @@ public class AuthService {
         this.tokenService = tokenService;
     }
 
-    void auth(AuthRequest authRequest) {
+    void request(AuthRequest authRequest) {
         Preconditions.checkArgument(StringUtils.isNotBlank(authRequest.getApiToken()), paramShouldNotBeBlank("apiToken"));
         Preconditions.checkArgument(EmailValidator.getInstance().isValid(authRequest.getUserId()), invalidEmail(authRequest.getUserId()));
 
@@ -83,5 +83,18 @@ public class AuthService {
                 authRequest.getUserId(),
                 "No password authentication",
                 callbackUrl);
+    }
+
+    public boolean verify(AuthVerify authVerify) {
+        // 1. Hash the received api token and find the matching app
+        App foundApp = appService.findByApiToken(tokenService.hash(authVerify.getApiToken()));
+        Preconditions.checkState(foundApp != null, "Unrecognized client application");
+
+        // 2. Find the Auth entity matching appId and userId
+        Auth auth = authRepository.find(foundApp.getId(), authVerify.getUserId());
+        Preconditions.checkState(auth != null, "No matching auth request");
+
+        // 3. Hash the received token and check against the found Auth entity
+        return StringUtils.equals(tokenService.hash(authVerify.getToken()), auth.getToken());
     }
 }

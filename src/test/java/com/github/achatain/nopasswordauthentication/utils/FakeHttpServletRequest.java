@@ -22,6 +22,7 @@ package com.github.achatain.nopasswordauthentication.utils;
 import com.google.appengine.repackaged.com.google.common.base.Function;
 import com.google.appengine.repackaged.com.google.common.base.Splitter;
 import com.google.appengine.repackaged.com.google.common.collect.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 
 import javax.servlet.RequestDispatcher;
@@ -133,7 +134,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
     }
 
     public BufferedReader getReader() {
-        return new BufferedReader(new StringReader(body));
+        return new BufferedReader(new StringReader(StringUtils.defaultString(body)));
     }
 
     /**
