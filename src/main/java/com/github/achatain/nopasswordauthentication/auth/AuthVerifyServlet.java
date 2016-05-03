@@ -35,6 +35,8 @@ import java.util.logging.Logger;
 @Singleton
 public class AuthVerifyServlet extends AuthorizedServlet {
 
+    private static final long serialVersionUID = -4354134743121914401L;
+
     private static final transient Logger LOG = Logger.getLogger(AuthVerifyServlet.class.getName());
 
     private final transient Gson gson;
