@@ -27,6 +27,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class AppRepositoryImplTest {
@@ -54,12 +56,15 @@ public class AppRepositoryImplTest {
 
     @Test
     public void shouldSaveAndFindById() throws Exception {
+        Long now = new Date().getTime();
+
         App app = App.builder()
                 .withApiToken("hashed token")
                 .withCallbackUrl("https://callback.com/")
                 .withEmailTemplate("<html></html>")
                 .withName("My App")
                 .withOwnerEmail("owner@myapp.com")
+                .withCreatedTimestamp(now)
                 .build();
 
         appRepository.save(app);
@@ -71,6 +76,7 @@ public class AppRepositoryImplTest {
         assertEquals("<html></html>", found.getEmailTemplate());
         assertEquals("My App", found.getName());
         assertEquals("owner@myapp.com", found.getOwnerEmail());
+        assertEquals(now, found.getCreatedTimestamp());
     }
 
     @Test

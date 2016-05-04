@@ -45,6 +45,8 @@ public class App {
 
     private String emailTemplate;
 
+    private Long createdTimestamp;
+
     public App() {
         // required by Objectify
     }
@@ -55,6 +57,7 @@ public class App {
         this.apiToken = builder.apiToken;
         this.callbackUrl = builder.callbackUrl;
         this.emailTemplate = builder.emailTemplate;
+        this.createdTimestamp = builder.createdTimestamp;
     }
 
     public static Builder builder() {
@@ -85,6 +88,10 @@ public class App {
         return emailTemplate;
     }
 
+    public Long getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
     @Override
     public String toString() {
         return "App{" +
@@ -94,6 +101,7 @@ public class App {
                 ", name='" + name + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
                 ", emailTemplate='" + emailTemplate + '\'' +
+                ", createdTimestamp='" + createdTimestamp + '\'' +
                 '}';
     }
 
@@ -104,6 +112,7 @@ public class App {
         private String apiToken;
         private String callbackUrl;
         private String emailTemplate;
+        private Long createdTimestamp;
 
         private Builder() {
         }
@@ -130,6 +139,10 @@ public class App {
 
         Builder withEmailTemplate(String emailTemplate) {
             this.emailTemplate = emailTemplate;
+            return this;
+        }
+        Builder withCreatedTimestamp(Long createdTimestamp) {
+            this.createdTimestamp = createdTimestamp;
             return this;
         }
 

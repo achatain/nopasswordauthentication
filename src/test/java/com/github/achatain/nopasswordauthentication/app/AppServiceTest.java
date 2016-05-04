@@ -26,7 +26,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -71,6 +74,7 @@ public class AppServiceTest {
         assertEquals("<html><p>Email Template</p></html>", app.getEmailTemplate());
         assertEquals("Test App", app.getName());
         assertEquals("owner@testapp.com", app.getOwnerEmail());
+        assertTrue(new Date().getTime() - app.getCreatedTimestamp() < 1000);
     }
 
     @Test(expected = IllegalArgumentException.class)
