@@ -141,6 +141,7 @@ public class App {
             this.emailTemplate = emailTemplate;
             return this;
         }
+
         Builder withCreatedTimestamp(Long createdTimestamp) {
             this.createdTimestamp = createdTimestamp;
             return this;
