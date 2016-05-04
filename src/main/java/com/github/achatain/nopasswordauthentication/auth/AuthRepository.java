@@ -20,7 +20,7 @@
 package com.github.achatain.nopasswordauthentication.auth;
 
 public interface AuthRepository {
-    Auth find(Long appId, String userId);
+    Auth findAndDelete(Long appId, String userId);
 
     void save(Auth auth);
 

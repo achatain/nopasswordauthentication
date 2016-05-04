@@ -20,12 +20,14 @@
 package com.github.achatain.nopasswordauthentication.di.filters;
 
 import com.github.achatain.nopasswordauthentication.exceptions.UnsupportedContentTypeException;
+import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.common.collect.Sets;
 import com.google.common.net.MediaType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Singleton;
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Set;
 
@@ -43,6 +45,11 @@ public class JsonFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        if (HTTPMethod.GET.name().equals(((HttpServletRequest) request).getMethod())) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String contentType = request.getContentType();
 
         if (JSON_TYPES.contains(StringUtils.lowerCase(contentType))) {

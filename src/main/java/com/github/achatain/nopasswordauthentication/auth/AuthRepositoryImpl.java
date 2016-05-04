@@ -42,8 +42,12 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public Auth find(Long appId, String userId) {
-        return ofy().load().key(buildAuthKey(appId, userId)).now();
+    public Auth findAndDelete(Long appId, String userId) {
+        Auth auth = ofy().load().key(buildAuthKey(appId, userId)).now();
+        if (auth != null) {
+            delete(auth);
+        }
+        return auth;
     }
 
     @Override
