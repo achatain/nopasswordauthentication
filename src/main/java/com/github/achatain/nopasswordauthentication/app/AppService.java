@@ -24,6 +24,7 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.inject.Inject;
+import java.util.Date;
 
 import static com.github.achatain.nopasswordauthentication.utils.MsgResources.invalidEmail;
 import static com.github.achatain.nopasswordauthentication.utils.MsgResources.paramShouldNotBeBlank;
@@ -55,6 +56,7 @@ public class AppService {
                 .withCallbackUrl(appDto.getCallbackUrl())
                 .withEmailTemplate(appDto.getEmailTemplate())
                 .withApiToken(tokenService.hash(apiToken))
+                .withCreatedTimestamp(new Date().getTime())
                 .build();
 
         appRepository.save(app);
