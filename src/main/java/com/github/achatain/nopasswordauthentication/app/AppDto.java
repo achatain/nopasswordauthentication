@@ -26,6 +26,10 @@ public class AppDto {
     private String callbackUrl;
     private String emailTemplate;
 
+    public AppDto() {
+        // Needed by Gson
+    }
+
     public AppDto(Builder builder) {
         this.ownerEmail = builder.ownerEmail;
         this.name = builder.name;
