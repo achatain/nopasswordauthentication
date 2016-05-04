@@ -92,6 +92,7 @@ public final class AppSettings {
         } catch (EntityNotFoundException e) {
             LOG.info("Creating empty app settings");
             entity = new Entity(KEY);
+            entity.setProperty(EMAIL_PROVIDER, EMAIL_PROVIDER_APPENGINE);
             DatastoreServiceFactory.getDatastoreService().put(entity);
         }
 
