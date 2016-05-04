@@ -22,6 +22,7 @@ package com.github.achatain.nopasswordauthentication.di.filters;
 import com.github.achatain.nopasswordauthentication.exceptions.UnsupportedContentTypeException;
 import com.github.achatain.nopasswordauthentication.utils.FakeHttpServletRequest;
 import com.github.achatain.nopasswordauthentication.utils.FakeHttpServletResponse;
+import com.google.appengine.api.urlfetch.HTTPMethod;
 import org.apache.http.HttpHeaders;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,15 @@ public class JsonFilterTest {
     }
 
     @Test
+    public void shouldAllowGetRequest() throws Exception {
+        jsonFilter.doFilter(req, resp, filterChain);
+
+        verify(filterChain).doFilter(req, resp);
+    }
+
+    @Test
     public void shouldFilterMediaTypeJson() throws Exception {
+        req.setMethod(HTTPMethod.POST.name());
         req.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
         jsonFilter.doFilter(req, resp, filterChain);
 
@@ -56,6 +65,7 @@ public class JsonFilterTest {
 
     @Test
     public void shouldFilterMediaTypeJsonUTF8() throws Exception {
+        req.setMethod(HTTPMethod.POST.name());
         req.setHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=utf-8");
         jsonFilter.doFilter(req, resp, filterChain);
 
@@ -63,7 +73,8 @@ public class JsonFilterTest {
     }
 
     @Test
-    public void shouldFilterMediaTypeJsonCasInsensitive() throws Exception {
+    public void shouldFilterMediaTypeJsonCaseInsensitive() throws Exception {
+        req.setMethod(HTTPMethod.POST.name());
         req.setHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
         jsonFilter.doFilter(req, resp, filterChain);
 
@@ -72,24 +83,28 @@ public class JsonFilterTest {
 
     @Test(expected = UnsupportedContentTypeException.class)
     public void shouldRejectNonJsonMediaType() throws Exception {
+        req.setMethod(HTTPMethod.POST.name());
         req.setHeader(HttpHeaders.CONTENT_TYPE, "text/html");
         jsonFilter.doFilter(req, resp, filterChain);
     }
 
     @Test(expected = UnsupportedContentTypeException.class)
     public void shouldRejectEmptyMediaType() throws Exception {
+        req.setMethod(HTTPMethod.POST.name());
         req.setHeader(HttpHeaders.CONTENT_TYPE, "");
         jsonFilter.doFilter(req, resp, filterChain);
     }
 
     @Test(expected = UnsupportedContentTypeException.class)
     public void shouldRejectNullMediaType() throws Exception {
+        req.setMethod(HTTPMethod.POST.name());
         req.setHeader(HttpHeaders.CONTENT_TYPE, null);
         jsonFilter.doFilter(req, resp, filterChain);
     }
 
     @Test(expected = UnsupportedContentTypeException.class)
     public void shouldRejectNoMediaType() throws Exception {
+        req.setMethod(HTTPMethod.POST.name());
         jsonFilter.doFilter(req, resp, filterChain);
     }
 }
