@@ -85,16 +85,24 @@ public class AuthService {
                 callbackUrl);
     }
 
-    public boolean verify(AuthVerify authVerify) {
+    boolean verify(AuthVerify authVerify) {
         // 1. Hash the received api token and find the matching app
         App foundApp = appService.findByApiToken(tokenService.hash(authVerify.getApiToken()));
         Preconditions.checkState(foundApp != null, "Unrecognized client application");
 
         // 2. Find the Auth entity matching appId and userId
-        Auth auth = authRepository.find(foundApp.getId(), authVerify.getUserId());
+        Auth auth = authRepository.findAndDelete(foundApp.getId(), authVerify.getUserId());
         Preconditions.checkState(auth != null, "No matching auth request");
 
         // 3. Hash the received token and check against the found Auth entity
-        return StringUtils.equals(tokenService.hash(authVerify.getToken()), auth.getToken());
+        boolean verified = StringUtils.equals(tokenService.hash(authVerify.getToken()), auth.getToken());
+
+        if (verified) {
+            LOG.info(String.format("Successful authentication against app [%s] for user [%s]", foundApp.getId(), authVerify.getUserId()));
+        } else {
+            LOG.info(String.format("Failed authentication against app [%s] for user [%s]", foundApp.getId(), authVerify.getUserId()));
+        }
+
+        return verified;
     }
 }

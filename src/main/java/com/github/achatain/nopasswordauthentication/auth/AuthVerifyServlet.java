@@ -30,14 +30,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 @Singleton
 public class AuthVerifyServlet extends AuthorizedServlet {
 
     private static final long serialVersionUID = -4354134743121914401L;
-
-    private static final transient Logger LOG = Logger.getLogger(AuthVerifyServlet.class.getName());
 
     private final transient Gson gson;
     private final transient AuthService authService;
@@ -57,13 +54,9 @@ public class AuthVerifyServlet extends AuthorizedServlet {
 
         authVerify.setApiToken(apiToken);
 
-        boolean authOk = authService.verify(authVerify);
-
-        if (authOk) {
-            LOG.info(String.format("Successful authentication for user [%s]", authVerify.getUserId()));
+        if (authService.verify(authVerify)) {
             ServletResponseUtils.writeJsonResponse(resp, "authorized", true);
         } else {
-            LOG.info(String.format("Failed authentication for user [%s]", authVerify.getUserId()));
             ServletResponseUtils.writeForbiddenResponse(resp);
         }
     }
