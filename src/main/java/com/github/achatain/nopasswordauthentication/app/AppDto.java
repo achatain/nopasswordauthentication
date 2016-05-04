@@ -19,15 +19,14 @@
 
 package com.github.achatain.nopasswordauthentication.app;
 
-public class AppDto {
+class AppDto {
 
     private String ownerEmail;
     private String name;
     private String callbackUrl;
     private String emailTemplate;
 
-    public AppDto() {
-        // Needed by Gson
+    private AppDto() {
     }
 
     public AppDto(Builder builder) {
