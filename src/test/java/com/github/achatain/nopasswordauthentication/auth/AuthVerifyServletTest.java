@@ -95,4 +95,15 @@ public class AuthVerifyServletTest {
         assertEquals(403, resp.getStatus());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectPostWithoutBody() throws Exception {
+        req.setHeader(HttpHeaders.AUTHORIZATION, AuthRequestServlet.BEARER_PREFIX + " faketoken ");
+        authVerifyServlet.doPost(req, resp);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectPostWithoutAuthorizationHeader() throws Exception {
+        authVerifyServlet.doPost(req, resp);
+    }
+
 }
