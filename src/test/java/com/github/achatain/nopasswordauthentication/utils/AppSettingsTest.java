@@ -78,6 +78,7 @@ public class AppSettingsTest {
         assertEquals("appengine", AppSettings.getEmailProvider());
         assertEquals("change_me", AppSettings.getEmailSender());
         assertEquals("change_me", AppSettings.getSendGridApiKey());
+        assertEquals(Integer.valueOf(600000), AppSettings.getAuthExpiry());
     }
 
     @Test
@@ -96,5 +97,11 @@ public class AppSettingsTest {
     public void shouldSetEmailSender() throws Exception {
         AppSettings.setEmailSender("test-email-sender");
         assertEquals("test-email-sender", AppSettings.getEmailSender());
+    }
+
+    @Test
+    public void shouldSetAuthExpiry() throws Exception {
+        AppSettings.setAuthExpiry(1);
+        assertEquals(Integer.valueOf(1), AppSettings.getAuthExpiry());
     }
 }

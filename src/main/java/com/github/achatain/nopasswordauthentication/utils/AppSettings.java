@@ -41,21 +41,24 @@ public final class AppSettings {
     private static final String SENDGRID_API_KEY = "sendGridApiKey";
     private static final String EMAIL_PROVIDER = "emailProvider";
     private static final String EMAIL_SENDER = "emailSender";
+    private static final String AUTH_EXPIRY = "authExpiry";
 
     // Properties constants
     private static final String CHANGE_ME = "change_me";
     public static final String EMAIL_PROVIDER_APPENGINE = "appengine";
     public static final String EMAIL_PROVIDER_SENDGRID = "sendgrid";
+    private static final Integer AUTH_DEFAULT_EXPIRY = 10*60*1000;
 
     private AppSettings() {
     }
 
     public static void reset() {
-        Map<String, String> defaultProperties = new HashMap<>();
+        Map<String, Object> defaultProperties = new HashMap<>();
 
         defaultProperties.put(SENDGRID_API_KEY, CHANGE_ME);
         defaultProperties.put(EMAIL_SENDER, CHANGE_ME);
         defaultProperties.put(EMAIL_PROVIDER, EMAIL_PROVIDER_APPENGINE);
+        defaultProperties.put(AUTH_EXPIRY, AUTH_DEFAULT_EXPIRY);
 
         setProperties(defaultProperties);
     }
@@ -84,6 +87,14 @@ public final class AppSettings {
         setProperty(EMAIL_SENDER, value);
     }
 
+    public static Integer getAuthExpiry() {
+        return getIntProperty(AUTH_EXPIRY);
+    }
+
+    static void setAuthExpiry(Integer value) {
+        setProperty(AUTH_EXPIRY, value);
+    }
+
     private static Entity getSettings() {
         Entity entity;
 
@@ -99,10 +110,10 @@ public final class AppSettings {
         return entity;
     }
 
-    private static void setProperties(Map<String, String> properties) {
+    private static void setProperties(Map<String, Object> properties) {
         Entity settings = getSettings();
 
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
+        for (Map.Entry<String, Object> entry : properties.entrySet()) {
             settings.setUnindexedProperty(entry.getKey(), entry.getValue());
             cacheProperty(entry.getKey(), entry.getValue());
         }
@@ -110,8 +121,8 @@ public final class AppSettings {
         DatastoreServiceFactory.getDatastoreService().put(settings);
     }
 
-    private static void setProperty(String property, String value) {
-        Map<String, String> properties = new HashMap<>();
+    private static void setProperty(String property, Object value) {
+        Map<String, Object> properties = new HashMap<>();
         properties.put(property, value);
         setProperties(properties);
     }
@@ -126,14 +137,30 @@ public final class AppSettings {
         return value;
     }
 
+    private static Integer getIntProperty(String property) {
+        Integer value = getCachedIntProperty(property);
+
+        if (value == null) {
+            value = getDatastoreIntProperty(property);
+        }
+
+        return value;
+    }
+
     private static String getCachedProperty(String property) {
         String value = (String) MemcacheServiceFactory.getMemcacheService().get(property);
         LOG.info(String.format("Property [%s] %s found in the cache", property, value == null ? "not" : ""));
         return value;
     }
 
-    private static void cacheProperty(String property, String value) {
-        LOG.info(String.format("Property [%s] put in the cache", property));
+    private static Integer getCachedIntProperty(String property) {
+        Integer value = (Integer) MemcacheServiceFactory.getMemcacheService().get(property);
+        LOG.info(String.format("Property [%s] %s found in the cache", property, value == null ? "not" : ""));
+        return value;
+    }
+
+    private static void cacheProperty(String property, Object value) {
+        LOG.info(String.format("Property [%s = %s] put in the cache", property, value));
         MemcacheServiceFactory.getMemcacheService().put(property, value);
     }
 
@@ -141,6 +168,21 @@ public final class AppSettings {
         String value;
 
         value = (String) getSettings().getProperty(property);
+
+        if (value == null) {
+            LOG.log(Level.SEVERE, String.format("Property [%s] is missing in the app settings.", property));
+            throw new InternalServerException("Bad app config");
+        }
+
+        cacheProperty(property, value);
+
+        return value;
+    }
+
+    private static Integer getDatastoreIntProperty(String property) {
+        Integer value;
+
+        value = (Integer) getSettings().getProperty(property);
 
         if (value == null) {
             LOG.log(Level.SEVERE, String.format("Property [%s] is missing in the app settings.", property));
