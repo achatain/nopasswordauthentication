@@ -165,9 +165,7 @@ public final class AppSettings {
     }
 
     private static String getDatastoreProperty(String property) {
-        String value;
-
-        value = (String) getSettings().getProperty(property);
+        String value = (String) getSettings().getProperty(property);
 
         if (value == null) {
             LOG.log(Level.SEVERE, String.format("Property [%s] is missing in the app settings.", property));
@@ -180,9 +178,7 @@ public final class AppSettings {
     }
 
     private static Integer getDatastoreIntProperty(String property) {
-        Integer value;
-
-        value = (Integer) getSettings().getProperty(property);
+        Integer value = (Integer) getSettings().getProperty(property);
 
         if (value == null) {
             LOG.log(Level.SEVERE, String.format("Property [%s] is missing in the app settings.", property));
