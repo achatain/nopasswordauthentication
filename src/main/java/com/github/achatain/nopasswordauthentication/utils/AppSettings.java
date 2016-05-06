@@ -64,7 +64,7 @@ public final class AppSettings {
     }
 
     public static String getSendGridApiKey() {
-        return getProperty(SENDGRID_API_KEY);
+        return getProperty(SENDGRID_API_KEY, String.class);
     }
 
     static void setSendgridApiKey(String value) {
@@ -72,7 +72,7 @@ public final class AppSettings {
     }
 
     public static String getEmailProvider() {
-        return getProperty(EMAIL_PROVIDER);
+        return getProperty(EMAIL_PROVIDER, String.class);
     }
 
     public static void setEmailProvider(String value) {
@@ -80,7 +80,7 @@ public final class AppSettings {
     }
 
     public static String getEmailSender() {
-        return getProperty(EMAIL_SENDER);
+        return getProperty(EMAIL_SENDER, String.class);
     }
 
     static void setEmailSender(String value) {
@@ -88,7 +88,7 @@ public final class AppSettings {
     }
 
     public static Integer getAuthExpiry() {
-        return getIntProperty(AUTH_EXPIRY);
+        return getProperty(AUTH_EXPIRY, Integer.class);
     }
 
     static void setAuthExpiry(Integer value) {
@@ -127,34 +127,18 @@ public final class AppSettings {
         setProperties(properties);
     }
 
-    private static String getProperty(String property) {
-        String value = getCachedProperty(property);
+    private static <T> T getProperty(String property, Class<T> clazz) {
+        T value = clazz.cast(getCachedProperty(property, clazz));
 
         if (value == null) {
-            value = getDatastoreProperty(property);
+            value = getDatastoreProperty(property, clazz);
         }
 
         return value;
     }
 
-    private static Integer getIntProperty(String property) {
-        Integer value = getCachedIntProperty(property);
-
-        if (value == null) {
-            value = getDatastoreIntProperty(property);
-        }
-
-        return value;
-    }
-
-    private static String getCachedProperty(String property) {
-        String value = (String) MemcacheServiceFactory.getMemcacheService().get(property);
-        LOG.info(String.format("Property [%s] %s found in the cache", property, value == null ? "not" : ""));
-        return value;
-    }
-
-    private static Integer getCachedIntProperty(String property) {
-        Integer value = (Integer) MemcacheServiceFactory.getMemcacheService().get(property);
+    private static <T> T getCachedProperty(String property, Class<T> clazz) {
+        T value = clazz.cast(MemcacheServiceFactory.getMemcacheService().get(property));
         LOG.info(String.format("Property [%s] %s found in the cache", property, value == null ? "not" : ""));
         return value;
     }
@@ -164,21 +148,8 @@ public final class AppSettings {
         MemcacheServiceFactory.getMemcacheService().put(property, value);
     }
 
-    private static String getDatastoreProperty(String property) {
-        String value = (String) getSettings().getProperty(property);
-
-        if (value == null) {
-            LOG.log(Level.SEVERE, String.format("Property [%s] is missing in the app settings.", property));
-            throw new InternalServerException("Bad app config");
-        }
-
-        cacheProperty(property, value);
-
-        return value;
-    }
-
-    private static Integer getDatastoreIntProperty(String property) {
-        Integer value = (Integer) getSettings().getProperty(property);
+    private static <T> T getDatastoreProperty(String property, Class<T> clazz) {
+        T value = clazz.cast(getSettings().getProperty(property));
 
         if (value == null) {
             LOG.log(Level.SEVERE, String.format("Property [%s] is missing in the app settings.", property));
