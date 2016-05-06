@@ -128,7 +128,7 @@ public final class AppSettings {
     }
 
     private static <T> T getProperty(String property, Class<T> clazz) {
-        T value = clazz.cast(getCachedProperty(property, clazz));
+        T value = getCachedProperty(property, clazz);
 
         if (value == null) {
             value = getDatastoreProperty(property, clazz);
