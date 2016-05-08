@@ -22,9 +22,7 @@ package com.github.achatain.nopasswordauthentication.app;
 import com.github.achatain.nopasswordauthentication.utils.TokenService;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
+import org.mockito.*;
 
 import java.util.Date;
 
@@ -32,11 +30,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class AppServiceTest {
-
-    private AppService appService;
 
     @Mock
     private AppRepository appRepository;
@@ -44,13 +39,15 @@ public class AppServiceTest {
     @Mock
     private TokenService tokenService;
 
+    @InjectMocks
+    private AppService appService;
+
     @Captor
     private ArgumentCaptor<App> appCaptor;
 
     @Before
     public void setUp() throws Exception {
-        initMocks(this);
-        appService = new AppService(appRepository, tokenService);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
