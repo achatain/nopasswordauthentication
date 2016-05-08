@@ -46,15 +46,15 @@ public class ExceptionFilter implements Filter {
         } catch (InternalServerException e) {
             LOG.log(Level.SEVERE, "Internal server error", e);
             ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Internal server error");
+            response.getWriter().write("Internal server error");
         } catch (UnsupportedContentTypeException e) {
             LOG.log(Level.SEVERE, "Unsupported content type error", e);
             ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
-            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Unsupported media type");
+            response.getWriter().write("Unsupported media type");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Exception caught", e);
             ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write(e.getMessage() != null ? e.getMessage() : "Unexpected error");
+            response.getWriter().write("Unexpected error");
         }
     }
 

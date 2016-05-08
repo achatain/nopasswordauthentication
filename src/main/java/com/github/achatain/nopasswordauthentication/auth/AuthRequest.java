@@ -28,6 +28,11 @@ class AuthRequest {
     private AuthRequest() {
     }
 
+    public AuthRequest(Builder builder) {
+        this.apiToken = builder.apiToken;
+        this.userId = builder.userId;
+    }
+
     void setApiToken(String apiToken) {
         this.apiToken = apiToken;
     }
@@ -46,5 +51,31 @@ class AuthRequest {
                 "apiToken='" + obfuscate(apiToken) + '\'' +
                 ", userId='" + userId + '\'' +
                 '}';
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String apiToken;
+        private String userId;
+
+        private Builder() {
+        }
+
+        public Builder withApiToken(String apiToken) {
+            this.apiToken = apiToken;
+            return this;
+        }
+
+        public Builder withUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public AuthRequest build() {
+            return new AuthRequest(this);
+        }
     }
 }
