@@ -5,19 +5,18 @@ No Password Authentication
 
 https://github.com/achatain/nopasswordauthentication
 
--
-
 ##What is it?
 
 Do you agree with the following:
+
 1. Remembering passwords is boring
 2. Developing authentication system is even more boring
 
 If yes, then you've come to the right place!
 
-**No Password Authentication** is a secure, standalone authentication server, designed to run in the Google Cloud Platform. It allows any web application to authenticate its users with just a couple of HTTPS requests.
+**No Password Authentication** is a secure, standalone authentication server, designed to run in the Google Cloud Platform.
 
--
+It allows any web application to authenticate its users with just a couple of HTTPS requests.
 
 ##How do I build it?
 
@@ -25,8 +24,6 @@ This could not be simpler! Just check out the master branch and run the followin
 ```
 mvn install
 ```
-
--
 
 ##How do I deploy it?
 
@@ -38,10 +35,6 @@ Once you have created a cloud project in App Engine, follow these 2 simple steps
 ```
 mvn appengine:update
 ```
-
--
-
--
 
 ###Trello board
 To keep track of ongoing and upcoming work
