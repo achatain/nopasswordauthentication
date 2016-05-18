@@ -63,7 +63,7 @@ In a nutshell, only two requests against the **No Password Authentication** serv
 ##Is there an already deployed instance that my web app can use straight away?
 Oh yes there is! And it's available here: https://no-password-authentication.appspot.com/
 
-It's totally free of use, thanks to the generously free quota of the Google Cloud Platform :)
+And the best thing is it's totally free to use, thanks to the generously free quota of the Google Cloud Platform :)
 
 
 ##Trello board
