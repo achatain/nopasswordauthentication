@@ -34,17 +34,17 @@ Once you have created a cloud project in App Engine, follow these 2 simple steps
 
 1. In the 'pom.xml' file, edit the property 'app.id' and replace the existing value with your own project id
 
-```xml
-<properties>
-  <app.id>my-app-id</app.id>
-</properties>
-```
+ ```xml
+ <properties>
+   <app.id>my-app-id</app.id>
+ </properties>
+ ```
 
 2. Run the following command to deploy:
 
-```bash
-$ mvn appengine:update
-```
+ ```bash
+ $ mvn appengine:update
+ ```
 
 ##How does it work?
 
@@ -60,6 +60,5 @@ When your end-user inputs their email address and pushes the login button on you
 
 When your end-user clicks on the authentication link from the email received in the first step, they are redirected to your web app. At this point, you just need to send a verification request to the **No Password Authentication** server, passing in your API token, the user's email address and the nonce. The server will perform its magic and let you know whether or not the authentication attempt was verified successfully. Then it comes down to you to manage your session and welcome your end-user appropriately!
 
-###Trello board
-To keep track of ongoing and upcoming work
-https://trello.com/b/NhaGm0kA
+##Trello board
+To keep track of ongoing and upcoming work, have a look at the public Trello board: https://trello.com/b/NhaGm0kA
