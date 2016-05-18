@@ -29,6 +29,16 @@ class AuthVerify {
     private AuthVerify() {
     }
 
+    public AuthVerify(Builder builder) {
+        this.apiToken = builder.apiToken;
+        this.userId = builder.userId;
+        this.token = builder.token;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     void setApiToken(String apiToken) {
         this.apiToken = apiToken;
     }
@@ -52,5 +62,33 @@ class AuthVerify {
                 ", userId='" + userId + '\'' +
                 ", token='" + obfuscate(token) + '\'' +
                 '}';
+    }
+
+    public static class Builder {
+        private String apiToken;
+        private String userId;
+        private String token;
+
+        private Builder() {
+        }
+
+        public Builder withApiToken(String apiToken) {
+            this.apiToken = apiToken;
+            return this;
+        }
+
+        public Builder withUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder withToken(String token) {
+            this.token = token;
+            return this;
+        }
+
+        public AuthVerify build() {
+            return new AuthVerify(this);
+        }
     }
 }

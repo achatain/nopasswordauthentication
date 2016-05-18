@@ -29,8 +29,7 @@ import org.mockito.*;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +49,9 @@ public class AuthServiceTest {
 
     @Mock
     private App app;
+
+    @Mock
+    private Auth auth;
 
     @InjectMocks
     private AuthService authService;
@@ -125,7 +127,68 @@ public class AuthServiceTest {
 
     @Test
     public void shouldVerify() throws Exception {
-        // TODO implement
+        AuthVerify authVerify = AuthVerify.builder()
+                .withApiToken("api-token")
+                .withUserId("test@github.com")
+                .withToken("token")
+                .build();
+
+        when(tokenService.hash("api-token")).thenReturn("hashed-api-token");
+        when(appService.findByApiToken("hashed-api-token")).thenReturn(app);
+        when(app.getId()).thenReturn(1L);
+        when(authRepository.findAndDelete(1L, "test@github.com")).thenReturn(auth);
+        when(tokenService.hash("token")).thenReturn("hashed-token");
+        when(auth.getToken()).thenReturn("hashed-token");
+
+        assertTrue(authService.verify(authVerify));
+    }
+
+    @Test
+    public void shouldNotVerify() throws Exception {
+        AuthVerify authVerify = AuthVerify.builder()
+                .withApiToken("api-token")
+                .withUserId("test@github.com")
+                .withToken("invalid-token")
+                .build();
+
+        when(tokenService.hash("api-token")).thenReturn("hashed-api-token");
+        when(appService.findByApiToken("hashed-api-token")).thenReturn(app);
+        when(app.getId()).thenReturn(1L);
+        when(authRepository.findAndDelete(1L, "test@github.com")).thenReturn(auth);
+        when(tokenService.hash("invalid-token")).thenReturn("hashed-invalid-token");
+        when(auth.getToken()).thenReturn("hashed-token");
+
+        assertFalse(authService.verify(authVerify));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldFailVerifyWhenNoAppMatchesApiToken() throws Exception {
+        AuthVerify authVerify = AuthVerify.builder()
+                .withApiToken("api-token")
+                .withUserId("test@github.com")
+                .withToken("token")
+                .build();
+
+        when(tokenService.hash("api-token")).thenReturn("hashed-api-token");
+        when(appService.findByApiToken("hashed-api-token")).thenReturn(null);
+
+        authService.verify(authVerify);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldFailVerifyWhenNoAuthFound() throws Exception {
+        AuthVerify authVerify = AuthVerify.builder()
+                .withApiToken("api-token")
+                .withUserId("test@github.com")
+                .withToken("token")
+                .build();
+
+        when(tokenService.hash("api-token")).thenReturn("hashed-api-token");
+        when(appService.findByApiToken("hashed-api-token")).thenReturn(app);
+        when(app.getId()).thenReturn(1L);
+        when(authRepository.findAndDelete(1L, "test@github.com")).thenReturn(null);
+
+        authService.verify(authVerify);
     }
 
 }
