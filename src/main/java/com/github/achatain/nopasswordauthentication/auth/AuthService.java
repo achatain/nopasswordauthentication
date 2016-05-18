@@ -22,6 +22,7 @@ package com.github.achatain.nopasswordauthentication.auth;
 import com.github.achatain.nopasswordauthentication.app.App;
 import com.github.achatain.nopasswordauthentication.app.AppService;
 import com.github.achatain.nopasswordauthentication.email.EmailService;
+import com.github.achatain.nopasswordauthentication.utils.AppSettings;
 import com.github.achatain.nopasswordauthentication.utils.TokenService;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
@@ -94,7 +95,10 @@ public class AuthService {
         Auth auth = authRepository.findAndDelete(foundApp.getId(), authVerify.getUserId());
         Preconditions.checkState(auth != null, "No matching auth request");
 
-        // 3. Hash the received token and check against the found Auth entity
+        // 3. Ensure that the Auth entity is not expired
+        Preconditions.checkState(new Date().getTime() < AppSettings.getAuthExpiry() + auth.getTimestamp(), "Auth request has expired");
+
+        // 4. Hash the received token and check against the found Auth entity
         boolean verified = StringUtils.equals(tokenService.hash(authVerify.getToken()), auth.getToken());
 
         if (verified) {
