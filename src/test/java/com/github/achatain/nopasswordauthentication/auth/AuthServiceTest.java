@@ -22,18 +22,29 @@ package com.github.achatain.nopasswordauthentication.auth;
 import com.github.achatain.nopasswordauthentication.app.App;
 import com.github.achatain.nopasswordauthentication.app.AppService;
 import com.github.achatain.nopasswordauthentication.email.EmailService;
+import com.github.achatain.nopasswordauthentication.utils.AppSettings;
 import com.github.achatain.nopasswordauthentication.utils.TokenService;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AuthServiceTest {
+
+    private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
+        new LocalDatastoreServiceTestConfig(),
+        new LocalMemcacheServiceTestConfig());
 
     @Mock
     private AppService appService;
@@ -61,7 +72,14 @@ public class AuthServiceTest {
 
     @Before
     public void setUp() throws Exception {
+        helper.setUp();
+        AppSettings.reset();
         MockitoAnnotations.initMocks(this);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        helper.tearDown();
     }
 
     @Test
@@ -137,6 +155,7 @@ public class AuthServiceTest {
         when(appService.findByApiToken("hashed-api-token")).thenReturn(app);
         when(app.getId()).thenReturn(1L);
         when(authRepository.findAndDelete(1L, "test@github.com")).thenReturn(auth);
+        when(auth.getTimestamp()).thenReturn(new Date().getTime());
         when(tokenService.hash("token")).thenReturn("hashed-token");
         when(auth.getToken()).thenReturn("hashed-token");
 
@@ -155,6 +174,7 @@ public class AuthServiceTest {
         when(appService.findByApiToken("hashed-api-token")).thenReturn(app);
         when(app.getId()).thenReturn(1L);
         when(authRepository.findAndDelete(1L, "test@github.com")).thenReturn(auth);
+        when(auth.getTimestamp()).thenReturn(new Date().getTime());
         when(tokenService.hash("invalid-token")).thenReturn("hashed-invalid-token");
         when(auth.getToken()).thenReturn("hashed-token");
 
@@ -171,7 +191,7 @@ public class AuthServiceTest {
 
         when(tokenService.hash("api-token")).thenReturn("hashed-api-token");
         when(appService.findByApiToken("hashed-api-token")).thenReturn(null);
-
+        when(auth.getTimestamp()).thenReturn(new Date().getTime());
         authService.verify(authVerify);
     }
 
@@ -191,4 +211,24 @@ public class AuthServiceTest {
         authService.verify(authVerify);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void shouldFailVerifyWhenAuthExpired() throws Exception {
+        AuthVerify authVerify = AuthVerify.builder()
+                .withApiToken("api-token")
+                .withUserId("test@github.com")
+                .withToken("token")
+                .build();
+
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.MINUTE, -AppSettings.getAuthExpiry()-1);
+        Long expiredTimestamp = cal.getTimeInMillis();
+
+        when(tokenService.hash("api-token")).thenReturn("hashed-api-token");
+        when(appService.findByApiToken("hashed-api-token")).thenReturn(app);
+        when(app.getId()).thenReturn(1L);
+        when(authRepository.findAndDelete(1L, "test@github.com")).thenReturn(auth);
+        when(auth.getTimestamp()).thenReturn(expiredTimestamp);
+
+        authService.verify(authVerify);
+    }
 }
