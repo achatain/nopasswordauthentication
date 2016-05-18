@@ -21,8 +21,9 @@ It allows any web application to authenticate its users with just a couple of HT
 ##How do I build it?
 
 This could not be simpler! Just check out the master branch and run the following command:
-```
-mvn install
+
+```bash
+$ mvn install
 ```
 
 ##How do I deploy it?
@@ -32,10 +33,17 @@ First you should be familiar with the Google Cloud Platform, especially App Engi
 Once you have created a cloud project in App Engine, follow these 2 simple steps to deploy your own instance of **No Password Authentication**:
 
 1. In the 'pom.xml' file, edit the property 'app.id' and replace the existing value with your own project id
+
+```xml
+<properties>
+  <app.id>my-app-id</app.id>
+</properties>
+```
+
 2. Run the following command to deploy:
 
-```
-mvn appengine:update
+```bash
+$ mvn appengine:update
 ```
 
 ##How does it work?
