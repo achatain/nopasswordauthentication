@@ -59,8 +59,3 @@ In a nutshell, only two requests against the **No Password Authentication** serv
 2. The authentication verification:
 
  When your end-user clicks on the authentication link from the email received in the first step, they are redirected to your web app. At this point, you just need to send a verification request to the **No Password Authentication** server, passing in your API token, the user's email address and the nonce. The server will perform its magic and let you know whether or not the authentication attempt was verified successfully. Then it comes down to you to manage your session and welcome your end-user appropriately!
-
-##Is there an already deployed instance that my web app can use straight away?
-Oh yes there is! And it's available here: https://no-password-authentication.appspot.com/
-
-And the best thing is it's totally free to use, thanks to the generously free quota of the Google Cloud Platform :)
