@@ -64,7 +64,3 @@ In a nutshell, only two requests against the **No Password Authentication** serv
 Oh yes there is! And it's available here: https://no-password-authentication.appspot.com/
 
 And the best thing is it's totally free to use, thanks to the generously free quota of the Google Cloud Platform :)
-
-
-##Trello board
-To keep track of ongoing and upcoming work, have a look at the public Trello board: https://trello.com/b/NhaGm0kA
